@@ -1,8 +1,3 @@
-"use client";
-
-// --> 1. Impor useState dari React
-import { useState } from "react"; 
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -13,26 +8,11 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-
-  // --> 2. Buat state untuk menampung email dan password
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  // --> 3. Buat fungsi yang akan dijalankan saat tombol login diklik
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault(); // Mencegah halaman refresh
-    console.log("Mencoba login dengan data:", { email, password });
-    
-    // Nanti di sini kita akan panggil API Laravel
-  };
-
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-
-          {/* --> 4. Hubungkan tag <form> dengan fungsi handleSubmit */}
-          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
+          <form className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -47,9 +27,6 @@ export function LoginForm({
                   type="email"
                   placeholder="m@example.com"
                   required
-                  // --> 4. Hubungkan input email dengan state
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-3">
@@ -62,19 +39,11 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input 
-                  id="password" 
-                  type="password" 
-                  required 
-                  // --> 4. Hubungkan input password dengan state
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <Input id="password" type="password" required />
               </div>
               <Button type="submit" className="w-full">
                 Login
               </Button>
-              {/* ... sisa kode Anda tetap sama ... */}
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">
                   Or continue with
@@ -119,7 +88,7 @@ export function LoginForm({
           </form>
           <div className="bg-muted relative hidden md:block">
             <img
-              src="perpustakaan.png"
+              src="/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
