@@ -3,9 +3,9 @@ import axios from "axios";
 // Ganti dengan URL backend Laravel kamu
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-export const login = async (username: string, password: string) => {
+export const login = async (email: string, password: string) => {
   const response = await axios.post(`${BASE_URL}/login`, {
-    username,
+    email,
     password,
   });
   return response.data;

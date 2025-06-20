@@ -29,16 +29,61 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { logout } from "@/lib/api";
+import { useEffect, useState } from "react"
+
+export function NavUser() {
   const { isMobile } = useSidebar()
+    const router = useRouter();
+  const [user, setUser] = useState<{
+    name: string;
+    email: string;
+    id: string;
+    avatar?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    // Ambil token dari localStorage (atau bisa juga pakai cookies/session)
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    if (!token) {
+      toast.error("Anda belum login!");
+      router.push("/");
+      return;
+    }
+
+    // Simulasikan data user (bisa fetch dari API)
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      setUser({
+        name: "peno",
+        email: "peno@example.com",
+        id: "xxxx",
+      }); // fallback
+    }
+  }, []);
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await logout(token); // panggil API untuk hapus token dari server
+      toast.error("Logout berhasil");
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } catch (err) {
+      toast.error("Gagal logout");
+    }
+  };
+
+  if (!user) return null;
 
   return (
     <SidebarMenu>
@@ -98,7 +143,10 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="text-red-600 hover:bg-red-100 cursor-pointer"
+            >
               <IconLogout />
               Log out
             </DropdownMenuItem>
