@@ -36,7 +36,7 @@ import { useEffect, useState } from "react"
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-    const router = useRouter();
+  const router = useRouter();
   const [user, setUser] = useState<{
     name: string;
     email: string;
@@ -129,7 +129,9 @@ export function NavUser() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+              onClick={() => router.push("./account")}
+              >
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
