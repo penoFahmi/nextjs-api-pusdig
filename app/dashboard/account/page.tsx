@@ -1,11 +1,12 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
+import { AccountSettingsForm } from "@/components/account-form";
 import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
-export default function Page() {
+export default function AccountPage() {
   return (
     <SidebarProvider
       style={
@@ -20,7 +21,11 @@ export default function Page() {
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            {/* isi nya disini ges */}
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <div className="border rounded-lg p-4 bg-muted">
+                <AccountSettingsForm />
+              </div>
+            </div> 
           </div>
         </div>
       </SidebarInset>

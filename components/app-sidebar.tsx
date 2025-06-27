@@ -42,27 +42,27 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "./dashboard",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
       title: "Buku",
-      url: "./buku",
+      url: "/dashboard/buku",
       icon: IconListDetails,
     },
     {
       title: "Peminjaman",
-      url: "./peminjaman",
+      url: "/dashboard/peminjaman",
       icon: IconChartBar,
     },
     {
       title: "Pengarang",
-      url: "./pengarang",
+      url: "/dashboard/pengarang",
       icon: IconFolder,
     },
     {
       title: "Laporan",
-      url: "./laporan",
+      url: "/dashboard/laporan",
       icon: IconUsers,
     },
   ],

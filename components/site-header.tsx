@@ -10,11 +10,11 @@ export function SiteHeader() {
   const pathname = usePathname()
   const pageTitleMap: Record<string, string> = {
     "/dashboard": "Dashboard",
-    "/buku": "Buku",
-    "/peminjaman": "Peminjaman",
-    "/pengarang": "Pengarang",
-    "/laporan": "Laporan",
-    "/account": "Account",
+    "/dashboard/buku": "Buku",
+    "/dashboard/peminjaman": "Peminjaman",
+    "/dashboard/pengarang": "Pengarang",
+    "/dashboard/laporan": "Laporan",
+    "/dashboard/account": "Account",
   };
 
   const pageTitle = pageTitleMap[pathname] || "Dashboard";
@@ -29,16 +29,6 @@ export function SiteHeader() {
         />
         <h1 className="text-base font-medium">{pageTitle}</h1>
         <div className="ml-auto flex items-center gap-2">
-          {/* <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground"
-            >
-              GitHub
-            </a>
-          </Button> */}
         </div>
       </div>
     </header>
