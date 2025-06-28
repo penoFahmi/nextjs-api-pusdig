@@ -130,7 +130,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem
-              onClick={() => router.push("./dashboard/account")}
+              onClick={() => router.push("./account")}
               >
                 <IconUserCircle />
                 Account

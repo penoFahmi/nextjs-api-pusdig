@@ -28,15 +28,29 @@ export function LoginForm({
       const res = await login(email, password);
 
       // Misalnya token dikembalikan dan disimpan
-      if (res.token) {
+      if (res.token && res.user && res.user.role) {
         // Simpan token ke localStorage atau cookies
         localStorage.setItem("token", res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
 
         // Redirect ke dashboard
-        toast.success("Login berhasil!");
+        toast.success(`Login berhasil! Selamat datang, ${res.user.name}.`);
+
+        let destination = "/user";
+        const userRole = res.user.role.name;
+
+        switch (userRole) {
+          case 'superadmin':
+          case 'pustakawan':
+            destination = "/dashboard";
+            break;
+          default:
+            destination = "/user";
+            break;
+        }
+
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push(destination);
         }, 1000); // 1 detik delay
       } else {
         toast.error("Login gagal: token tidak diterima");

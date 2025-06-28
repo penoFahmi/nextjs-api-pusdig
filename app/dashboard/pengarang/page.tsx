@@ -1,4 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import PenulisList from "@/components/penulis-list"
+import PenulisBukuList from "@/components/penulis-buku-list"
 import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
@@ -20,7 +22,26 @@ export default function Page() {
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            {/* isi nya disini ges */}
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+              <h1 className="text-2xl font-semibold tracking-tight">Daftar Penulis</h1>
+              <p className="text-muted-foreground">
+                Berikut adalah daftar Penulis yang diambil dari API Laravel.
+              </p>
+
+              <div className="border rounded-lg p-4 bg-muted">
+                <PenulisList />
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+              <h1 className="text-2xl font-semibold tracking-tight">Daftar Penulis Buku</h1>
+              <p className="text-muted-foreground">
+                Berikut adalah daftar Penulis Buku yang diambil dari API Laravel.
+              </p>
+
+              <div className="border rounded-lg p-4 bg-muted">
+                <PenulisBukuList />
+              </div>
+            </div>
           </div>
         </div>
       </SidebarInset>
