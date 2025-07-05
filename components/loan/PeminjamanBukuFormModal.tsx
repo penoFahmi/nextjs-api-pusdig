@@ -42,7 +42,7 @@ interface Props {
   user: User[]
 }
 
-export default function PenulisBukuFormModal({ peminjamanBuku, buku, user, trigger, onSubmit }: Props) {
+export default function PeminjamanBukuFormModal({ peminjamanBuku, buku, user, trigger, onSubmit }: Props) {
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState<PeminjamanBuku>({
     book_id: peminjamanBuku?.book_id || "",
