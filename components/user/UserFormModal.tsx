@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Dialog,
@@ -12,30 +12,28 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
-interface Buku {
+interface User {
   id: number
-  title: string
-  isbn: number
-  publisher: string
-  year_published: number
-  stock: number
+  name: string
+  email: string
+  password: string
+  password_confirmation: string
 }
 
 interface Props {
-  buku?: Buku
+  user?: User
   trigger: React.ReactNode
-  onSubmit: (data: Buku) => void
+  onSubmit: (data: User) => void
 }
 
-export default function BukuFormModal({ buku, trigger, onSubmit }: Props) {
+export default function UserFormModal({ user, trigger, onSubmit }: Props) {
   const [open, setOpen] = useState(false)
-  const [form, setForm] = useState<Buku>({
-    title: buku?.title || "",
-    isbn: buku?.isbn || "",
-    publisher: buku?.publisher || "",
-    year_published: buku?.year_published || "",
-    stock: buku?.stock || "",
-    id: buku?.id || "",
+  const [form, setForm] = useState<User>({
+    id: user?.id ?? 0,
+    name: user?.name || "",
+    email: user?.email || "",
+    password: "",
+    password_confirmation: "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,44 +50,38 @@ export default function BukuFormModal({ buku, trigger, onSubmit }: Props) {
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{buku ? "Edit Buku" : "Tambah Buku"}</DialogTitle>
+          <DialogTitle>{user ? "Edit Buku" : "Tambah Buku"}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-2">
 
           <Input
-            name="title"
-            placeholder="Judul"
-            value={form.title}
+            name="name"
+            placeholder="Nama"
+            value={form.name}
             onChange={handleChange}
           />
           <Input
-            name="isbn"
-            placeholder="ISBN"
-            value={form.isbn}
+            name="email"
+            placeholder="Email"
+            value={form.email}
             onChange={handleChange}
           />
           <Input
-            name="publisher"
-            placeholder="Penerbit"
-            value={form.publisher}
+            name="password"
+            placeholder="Password"
+            value={form.password}
             onChange={handleChange}
           />
           <Input
-            name="year_published"
-            placeholder="Tahun Terbit"
-            value={form.year_published}
-            onChange={handleChange}
-          />
-          <Input
-            name="stock"
-            placeholder="Stock"
-            value={form.stock}
+            name="password_confirmation"
+            placeholder="Password Konfirmasi"
+            value={form.password_confirmation}
             onChange={handleChange}
           />
         </div>
         <DialogFooter>
           <Button onClick={handleSubmit}>
-            {buku ? "Simpan Perubahan" : "Tambah"}
+            {user ? "Simpan Perubahan" : "Tambah"}
           </Button>
         </DialogFooter>
       </DialogContent>

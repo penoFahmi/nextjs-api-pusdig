@@ -9,8 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import { fetchBuku, deleteBuku, updateBuku, createBuku } from "@/lib/api";
-import { Button } from "./ui/button";
+import { fetchPenulis, deletePenulis, updatePenulis, createPenulis } from "@/lib/api";
+import { Button } from "../ui/button";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -23,65 +23,63 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import BukuFormModal from "./BukuFormModal";
+import PenulisFormModal from "./PenulisFormModal";
 
-interface Buku {
+interface Penulis {
   id: number;
-  title: string;
-  isbn: number;
-  publisher: string;
-  year_published: number;
-  stock: number;
+  name: string;
+  nationality: string;
+  birthdate: number;
 }
 
-export default function BukuList() {
-  const [buku, setBuku] = useState<Buku[]>([]);
+export default function PenulisList() {
+  const [penulis, setPenulis] = useState<Penulis[]>([]);
 
   useEffect(() => {
-    fetchBuku().then(setBuku);
+    fetchPenulis().then(setPenulis);
   }, []);
 
   const handleDelete = async (id: number) => {
     const token = localStorage.getItem("token");
     try {
-      await deleteBuku(id, token);
-      setBuku((prev) => prev.filter((u) => u.id !== id));
-      toast.success("Buku berhasil dihapus");
+      await deletePenulis(id, token);
+      setPenulis((prev) => prev.filter((u) => u.id !== id));
+      toast.success("Penulis berhasil dihapus");
     } catch (err) {
-      toast.error("Gagal menghapus buku");
+      toast.error("Gagal menghapus penulis");
     }
   };
 
   const handleUpdate = async (data: any) => {
     const token = localStorage.getItem("token");
     try {
-      await updateBuku(data.id, data, token);
-      const updatedBuku = await fetchBuku();
-      setBuku(updatedBuku);
+      await updatePenulis(data.id, data, token);
+      const updatedPenulis = await fetchPenulis();
+      setPenulis(updatedPenulis);
 
-      toast.success("Buku berhasil diupdate");
+      toast.success("Penulis berhasil diupdate");
     } catch (err) {
-      toast.error("Gagal mengupdate buku");
+      toast.error("Gagal mengupdate penulis");
     }
   };
 
   const handleCreate = async (data: any) => {
     const token = localStorage.getItem("token");
     try {
-      await createBuku(data, token);
-      const updated = await fetchBuku();
-      setBuku(updated);
-      toast.success("Buku berhasil ditambahkan");
+      await createPenulis(data, token);
+      const updated = await fetchPenulis();
+      setPenulis(updated);
+      toast.success("Penulis berhasil ditambahkan");
     } catch (err) {
-      toast.error("Gagal menambahkan buku");
+      toast.error("Gagal menambahkan penulis");
     }
   };
 
   return (
     <div className="rounded-md border p-4 space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Daftar User</h2>
-        <BukuFormModal
+        <h2 className="text-xl font-semibold">Daftar Penulis</h2>
+        <PenulisFormModal
           onSubmit={handleCreate}
           trigger={<Button>+ Tambah</Button>}
         />
@@ -90,26 +88,22 @@ export default function BukuList() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px]">#</TableHead>
-            <TableHead>Nama Buku</TableHead>
-            <TableHead>Isbn</TableHead>
-            <TableHead>Penerbit</TableHead>
-            <TableHead>Tahun Diterbitkan</TableHead>
-            <TableHead>Stock</TableHead>
+            <TableHead>Nama Penulis</TableHead>
+            <TableHead>Negara</TableHead>
+            <TableHead>Tanggal Lahir</TableHead>
             <TableHead className="text-right">Aksi</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {buku.map((buku, index) => (
-            <TableRow key={buku.id}>
+          {penulis.map((penulis, index) => (
+            <TableRow key={penulis.id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{buku.title}</TableCell>
-              <TableCell>{buku.isbn}</TableCell>
-              <TableCell>{buku.publisher}</TableCell>
-              <TableCell>{buku.year_published}</TableCell>
-              <TableCell>{buku.stock}</TableCell>
+              <TableCell>{penulis.name}</TableCell>
+              <TableCell>{penulis.nationality}</TableCell>
+              <TableCell>{penulis.birthdate}</TableCell>
               <TableCell className="text-right space-x-2">
-                <BukuFormModal
-                  buku={buku}
+                <PenulisFormModal
+                  penulis={penulis}
                   onSubmit={handleUpdate}
                   trigger={
                     <Button size="sm" variant="outline">
@@ -126,7 +120,7 @@ export default function BukuList() {
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        Yakin ingin menghapus buku ini?
+                        Yakin ingin menghapus penulis ini?
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         Tindakan ini tidak bisa dibatalkan. Data akan hilang
@@ -136,7 +130,7 @@ export default function BukuList() {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Batal</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => handleDelete(buku.id)}
+                        onClick={() => handleDelete(penulis.id)}
                         className="bg-red-600 hover:bg-red-700"
                       >
                         Ya, Hapus
