@@ -24,6 +24,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import BukuFormModal from "./BukuFormModal";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 interface Buku {
   id: number;
@@ -36,6 +37,8 @@ interface Buku {
 
 export default function BukuList() {
   const [buku, setBuku] = useState<Buku[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     fetchBuku().then(setBuku);
@@ -77,6 +80,28 @@ export default function BukuList() {
     }
   };
 
+  const totalPages = Math.ceil(buku.length / rowsPerPage);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = buku.slice(indexOfFirstRow, indexOfLastRow);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleRowsPerPageChange = (value: string) => {
+    setRowsPerPage(Number(value));
+    setCurrentPage(1); // Kembali ke halaman pertama setiap kali jumlah baris diubah
+  };
+
   return (
     <div className="rounded-md border p-4 space-y-4">
       <div className="flex justify-between items-center">
@@ -99,9 +124,9 @@ export default function BukuList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {buku.map((buku, index) => (
+          {currentRows.map((buku, index) => (
             <TableRow key={buku.id}>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{indexOfFirstRow + index + 1}</TableCell>
               <TableCell>{buku.title}</TableCell>
               <TableCell>{buku.isbn}</TableCell>
               <TableCell>{buku.publisher}</TableCell>
@@ -149,6 +174,47 @@ export default function BukuList() {
           ))}
         </TableBody>
       </Table>
+      <div className="flex items-center justify-end space-x-4 py-4">
+        <div className="flex items-center space-x-2">
+          <p className="text-sm font-medium">Rows per page</p>
+          <Select
+            value={`${rowsPerPage}`}
+            onValueChange={handleRowsPerPageChange}
+          >
+            <SelectTrigger className="h-8 w-[70px]">
+              <SelectValue placeholder={rowsPerPage} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {[5, 10, 20, 50].map((pageSize) => (
+                <SelectItem key={pageSize} value={`${pageSize}`}>
+                  {pageSize}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="text-sm font-medium">
+          Page {currentPage} of {totalPages}
+        </div>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

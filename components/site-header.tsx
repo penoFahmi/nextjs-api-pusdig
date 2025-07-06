@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
@@ -12,9 +11,10 @@ export function SiteHeader() {
     "/dashboard": "Dashboard",
     "/dashboard/buku": "Buku",
     "/dashboard/peminjaman": "Peminjaman",
-    "/dashboard/pengarang": "Pengarang",
+    "/dashboard/penulis": "Penulis",
+    "/dashboard/penulis-buku": "Penulis Buku",
     "/dashboard/laporan": "Laporan",
-    "/dashboard/account": "Account",
+    "/account": "Account",
   };
 
   const pageTitle = pageTitleMap[pathname] || "Dashboard";

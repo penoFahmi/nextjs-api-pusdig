@@ -46,18 +46,23 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Buku",
-      url: "/dashboard/buku",
+      title: "Peminjaman",
+      url: "/dashboard/peminjaman",
       icon: IconListDetails,
     },
     {
-      title: "Peminjaman",
-      url: "/dashboard/peminjaman",
+      title: "Buku",
+      url: "/dashboard/buku",
       icon: IconChartBar,
     },
     {
-      title: "Pengarang",
-      url: "/dashboard/pengarang",
+      title: "Penulis",
+      url: "/dashboard/penulis",
+      icon: IconFolder,
+    },
+    {
+      title: "Penulis Buku",
+      url: "/dashboard/penulis-buku",
       icon: IconFolder,
     },
     {
