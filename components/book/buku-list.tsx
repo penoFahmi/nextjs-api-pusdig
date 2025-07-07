@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import BukuFormModal from "./BukuFormModal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Input } from "../ui/input";
 
 interface Buku {
   id: number;
@@ -39,10 +40,15 @@ export default function BukuList() {
   const [buku, setBuku] = useState<Buku[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchBuku().then(setBuku);
   }, []);
+
+  const filteredBuku = buku.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleDelete = async (id: number) => {
     const token = localStorage.getItem("token");
@@ -80,35 +86,49 @@ export default function BukuList() {
     }
   };
 
-  const totalPages = Math.ceil(buku.length / rowsPerPage);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = buku.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredBuku.length / rowsPerPage);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredBuku.slice(indexOfFirstRow, indexOfLastRow);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-  const handleRowsPerPageChange = (value: string) => {
-    setRowsPerPage(Number(value));
-    setCurrentPage(1); // Kembali ke halaman pertama setiap kali jumlah baris diubah
-  };
+  const handleRowsPerPageChange = (value: string) => {
+    setRowsPerPage(Number(value));
+    setCurrentPage(1);
+  };
+  
+  // BARU: Fungsi untuk menangani perubahan pada input search
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setCurrentPage(1); // Kembali ke halaman pertama setiap kali user mencari
+  };
 
   return (
     <div className="rounded-md border p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Daftar Buku</h2>
+      <h2 className="text-xl font-semibold">Daftar Buku</h2>
+      <div className="flex items-center py-4">
+         <Input
+            placeholder="Cari berdasarkan judul..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="max-w-sm"
+          />
         <BukuFormModal
           onSubmit={handleCreate}
-          trigger={<Button>+ Tambah</Button>}
+          trigger={<Button
+          className="ml-auto"
+          >+ Tambah</Button>}
         />
       </div>
       <Table>
@@ -124,7 +144,8 @@ export default function BukuList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentRows.map((buku, index) => (
+          {currentRows.length > 0 ? (
+          currentRows.map((buku, index) => (
             <TableRow key={buku.id}>
               <TableCell>{indexOfFirstRow + index + 1}</TableCell>
               <TableCell>{buku.title}</TableCell>
@@ -171,7 +192,14 @@ export default function BukuList() {
                 </AlertDialog>
               </TableCell>
             </TableRow>
-          ))}
+          ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={7} className="h-24 text-center">
+                Buku tidak ditemukan.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       <div className="flex items-center justify-end space-x-4 py-4">
@@ -194,7 +222,7 @@ export default function BukuList() {
           </Select>
         </div>
         <div className="text-sm font-medium">
-          Page {currentPage} of {totalPages}
+          Page {currentPage} of {totalPages > 0 ? totalPages : 1}
         </div>
         <div className="space-x-2">
           <Button

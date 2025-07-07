@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import PeminjamanBukuList from "@/components/loan/peminjaman-buku-list"
+import PeminjamanBukuList from "@/components/peminjamanv2/peminjaman-buku-list"
 import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
