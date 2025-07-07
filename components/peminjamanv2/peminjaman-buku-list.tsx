@@ -99,12 +99,12 @@ export default function PeminjamanBukuList() {
       toast.error("Gagal menghapus peminjaman buku");
     }
   };
+
   const handleKembalikan = async (peminjaman: PeminjamanBuku) => {
     const token = localStorage.getItem("token");
     try {
-      // Panggil API untuk update status dan stok di backend
+      // Cukup kirim status, tidak perlu seluruh objek
       await updatePeminjamanBuku(peminjaman.id, {
-        ...peminjaman,
         status: "Dikembalikan",
       }, token);
       
@@ -173,7 +173,6 @@ export default function PeminjamanBukuList() {
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Daftar Penulis Buku</h2>
         <PeminjamanBukuFormModal
-          peminjamanBuku={peminjamanBuku}
           onSubmit={handleCreate}
           buku={buku}
           user={user}
@@ -220,7 +219,7 @@ export default function PeminjamanBukuList() {
                 {item.status === 'Dipinjam' && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="sm">
+                    <Button className="bg-yellow-300" variant="destructive" size="sm">
                       Kembalikan
                     </Button>
                   </AlertDialogTrigger>

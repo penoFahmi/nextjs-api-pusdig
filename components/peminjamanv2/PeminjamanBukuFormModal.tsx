@@ -34,6 +34,7 @@ interface PeminjamanBuku {
   id: number;
   book_id: string;
   user_id: string;
+  status: string;
 }
 
 interface Props {
