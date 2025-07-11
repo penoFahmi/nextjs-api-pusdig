@@ -33,6 +33,7 @@ import {
 import PeminjamanBukuFormModal from "./PeminjamanBukuFormModal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "../ui/input";
 
 interface User {
     id: number;
@@ -61,6 +62,11 @@ export default function PeminjamanBukuList() {
   // const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredPeminjamanBuku = peminjamanBuku.filter((item) =>
+    item.user?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.book?.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     loadData();
@@ -147,9 +153,9 @@ export default function PeminjamanBukuList() {
   // }
 
   const totalPages = Math.ceil(peminjamanBuku.length / rowsPerPage);
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = peminjamanBuku.slice(indexOfFirstRow, indexOfLastRow);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredPeminjamanBuku.slice(indexOfFirstRow, indexOfLastRow);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -168,15 +174,28 @@ export default function PeminjamanBukuList() {
     setCurrentPage(1); // Kembali ke halaman pertama setiap kali jumlah baris diubah
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setCurrentPage(1); // Kembali ke halaman pertama setiap kali user mencari
+  };
+
   return (
     <div className="rounded-md border p-4 space-y-4">
-      <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Daftar Penulis Buku</h2>
+        <div className="flex items-center py-4">
+          <Input
+                    placeholder="Cari berdasarkan Judul Buku..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="max-w-sm"
+          />
         <PeminjamanBukuFormModal
           onSubmit={handleCreate}
           buku={buku}
           user={user}
-          trigger={<Button>+ Tambah</Button>}
+          trigger={<Button
+            className="ml-auto"
+          >+ Tambah</Button>}
         />
       </div>
       <Table>

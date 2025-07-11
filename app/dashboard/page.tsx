@@ -1,7 +1,8 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive"
 import { DataTable } from "@/components/data-table"
-import { SectionCards } from "@/components/section-cards"
+import { SectionCards } from "@/components/dashboard/section-cards"
+import { OverdueLoansList } from "@/components/dashboard/overdue-loans-list"
 import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
@@ -9,6 +10,8 @@ import {
 } from "@/components/ui/sidebar"
 
 import data from "./data.json"
+import { LoanActivityChart } from "@/components/dashboard/loan-activity-chart"
+import { PopularBooksList } from "@/components/dashboard/popular-books-list"
 
 export default function Page() {
   return (
@@ -28,9 +31,14 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
               <div className="px-4 lg:px-6">
-                <ChartAreaInteractive />
+                <LoanActivityChart />
               </div>
-              <DataTable data={data} />
+              <div className="px-4 lg:px-6">
+                <OverdueLoansList />
+              </div>
+              <div className="px-4 lg:px-6">
+                <PopularBooksList />
+              </div>
             </div>
           </div>
         </div>
