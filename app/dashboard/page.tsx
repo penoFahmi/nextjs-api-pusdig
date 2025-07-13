@@ -12,6 +12,7 @@ import {
 import data from "./data.json"
 import { LoanActivityChart } from "@/components/dashboard/loan-activity-chart"
 import { PopularBooksList } from "@/components/dashboard/popular-books-list"
+import { SiteFooter } from "@/components/site-footer"
 
 export default function Page() {
   return (
@@ -42,6 +43,7 @@ export default function Page() {
             </div>
           </div>
         </div>
+        <SiteFooter />
       </SidebarInset>
     </SidebarProvider>
   )

@@ -8,8 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useRef } from "react";
 import { useEffect, useState } from "react";
-import { fetchBuku, deleteBuku, updateBuku, createBuku } from "@/lib/api";
+import { fetchBuku, deleteBuku, updateBuku, createBuku, importBuku } from "@/lib/api";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import {
@@ -41,6 +42,7 @@ export default function BukuList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null); 
 
   useEffect(() => {
     fetchBuku().then(setBuku);
@@ -114,6 +116,40 @@ export default function BukuList() {
     setCurrentPage(1); // Kembali ke halaman pertama setiap kali user mencari
   };
 
+  // Fungsi untuk menangani upload file
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("file", file); // 'file' harus cocok dengan yang di Laravel
+
+    try {
+      await importBuku(formData, token);
+      toast.success("File berhasil diimpor! Memuat ulang data...");
+      
+      // Muat ulang data untuk menampilkan buku baru
+      const updated = await fetchBuku();
+      setBuku(updated);
+
+    } catch (err: any) {
+    toast.error(err.message);
+  }
+
+    // Reset input file agar bisa memilih file yang sama lagi
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // BARU: Fungsi untuk memicu klik pada input file
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="rounded-md border p-4 space-y-4">
       <h2 className="text-xl font-semibold">Daftar Buku</h2>
@@ -124,12 +160,24 @@ export default function BukuList() {
             onChange={handleSearchChange}
             className="max-w-sm"
           />
+        <div className="ml-auto flex items-center space-x-2">
+        <Input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept=".xlsx, .csv"
+           />
+           <Button variant="outline" onClick={handleImportClick}>
+             Impor Excel
+           </Button>
         <BukuFormModal
           onSubmit={handleCreate}
           trigger={<Button
           className="ml-auto"
           >+ Tambah</Button>}
         />
+        </div>
       </div>
       <Table>
         <TableHeader>

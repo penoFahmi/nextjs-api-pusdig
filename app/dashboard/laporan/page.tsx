@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { ReportGenerator } from "@/components/reports/report-generator"; // Impor komponen baru
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Impor komponen Tabs
@@ -68,6 +69,7 @@ export default function Page() {
             </TabsContent>
           </Tabs>
         </div>
+        <SiteFooter />
       </SidebarInset>
     </SidebarProvider>
   );

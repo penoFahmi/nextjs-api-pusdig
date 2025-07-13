@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import PenulisList from "@/components/author/penulis-list"
+import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import {
   SidebarInset,
@@ -33,6 +34,7 @@ export default function Page() {
             </div>
           </div>
         </div>
+        <SiteFooter />
       </SidebarInset>
     </SidebarProvider>
   )

@@ -5,6 +5,7 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { SiteFooter } from "@/components/site-footer"
 
 export default function Page() {
   return (
@@ -33,6 +34,7 @@ export default function Page() {
             </div>
           </div>
         </div>
+        <SiteFooter />
       </SidebarInset>
     </SidebarProvider>
   )

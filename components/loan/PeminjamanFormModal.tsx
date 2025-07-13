@@ -13,8 +13,16 @@ import { toast } from "sonner";
 import { createLoan } from "@/lib/api"; 
 
 // Interface bisa diimpor dari file utama jika Anda memisahkannya
-interface Book { id: string; title: string; stock: number; }
-interface User { id: string; name: string; }
+interface Book { 
+  id: string; 
+  title: string; 
+  stock: number; 
+}
+interface User { 
+  id: string; 
+  name: string;
+  can_borrow: boolean; 
+}
 
 interface Props {
   trigger: React.ReactNode;
@@ -88,7 +96,22 @@ export default function PeminjamanFormModal({ trigger, onFinished, books, users 
         <div className="space-y-4 py-2">
           <Select name="user_id" value={userId} onValueChange={setUserId}>
             <SelectTrigger><SelectValue placeholder="Pilih Nama Peminjam" /></SelectTrigger>
-            <SelectContent>{users.map(u => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}</SelectContent>
+            <SelectContent>
+                {users.map(user => (
+                  <SelectItem 
+                    key={user.id} 
+                    value={user.id}
+                    // Menonaktifkan pilihan jika user tidak bisa meminjam
+                    disabled={!user.can_borrow}
+                  >
+                    {user.name}
+                    {/* Memberi label visual jika user tidak bisa meminjam */}
+                    {!user.can_borrow && (
+                      <span className="text-red-500 ml-2 text-xs">(Ada tanggungan)</span>
+                    )}
+                  </SelectItem>
+                ))}
+              </SelectContent>
           </Select>
 
           <Popover>

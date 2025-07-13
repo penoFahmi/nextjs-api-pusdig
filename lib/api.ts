@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Ganti dengan URL backend Laravel kamu
-const BASE_URL = "http://127.0.0.1:8000/api";
+const BASE_URL = "http://172.16.177.202:8000/api";
 
 const getToken = () => localStorage.getItem('token')
 
@@ -175,6 +175,27 @@ export async function deleteBuku(id: number) {
   })
   return res.json()
 }
+
+export async function importBuku(formData: FormData) {
+  const res = await fetch(`${BASE_URL}/book/import`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  // Jika respons TIDAK sukses (misal: error 422 atau 500)
+  if (!res.ok) {
+     // Baca body JSON dari respons error untuk mendapatkan pesan dari backend
+     const errorData = await res.json();
+     // Lemparkan error dengan pesan spesifik dari backend
+     throw new Error(errorData.message || 'Gagal mengimpor file.');
+  }
+  
+  // Jika sukses, kembalikan data JSON
+  return res.json();
+};
 
 //api author
 export async function fetchPenulis() {
@@ -525,6 +546,19 @@ export async function getReport(reportType: string, params: { start_date: string
 export async function getBookInventoryReport() {
     try {
         const res = await fetch(`${BASE_URL}/reports/book-inventory`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        });
+        if (!res.ok) throw new Error("Gagal mengambil data inventaris buku.");
+        return res.json();
+    } catch (error) {
+        handleError(error);
+    }
+}
+export async function exportFile() {
+    try {
+        const res = await fetch(`${BASE_URL}/reports`, {
             headers: {
                 Authorization: `Bearer ${getToken()}`,
             },
