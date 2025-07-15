@@ -66,7 +66,6 @@ export async function createUser(data: { name: string, email: string }) {
   })
   return res.json()
 }
-
 export async function updateUser(id: string, data: any) {
   const token = getToken()
   if (!token) throw new Error("Token tidak ditemukan")
@@ -88,7 +87,6 @@ export async function updateUser(id: string, data: any) {
 
   return res.json()
 }
-
 export async function deleteUser(id: number) {
   const res = await fetch(`${BASE_URL}/user/${id}`, {
     method: 'DELETE',
@@ -143,7 +141,6 @@ export async function createBuku(data: { title: string, isbn: number, publisher:
   })
   return res.json()
 }
-
 export async function updateBuku(id: string, data: any) {
   const token = getToken()
   if (!token) throw new Error("Token tidak ditemukan")
@@ -165,7 +162,6 @@ export async function updateBuku(id: string, data: any) {
 
   return res.json()
 }
-
 export async function deleteBuku(id: number) {
   const res = await fetch(`${BASE_URL}/book/${id}`, {
     method: 'DELETE',
@@ -175,7 +171,6 @@ export async function deleteBuku(id: number) {
   })
   return res.json()
 }
-
 export async function importBuku(formData: FormData) {
   const res = await fetch(`${BASE_URL}/book/import`, {
     method: 'POST',
@@ -217,7 +212,6 @@ export async function createPenulis(data: { name: string, nationality: string, b
   })
   return res.json()
 }
-
 export async function updatePenulis(id: string, data: any) {
   const token = getToken()
   if (!token) throw new Error("Token tidak ditemukan")
@@ -239,7 +233,6 @@ export async function updatePenulis(id: string, data: any) {
 
   return res.json()
 }
-
 export async function deletePenulis(id: number) {
   const res = await fetch(`${BASE_URL}/author/${id}`, {
     method: 'DELETE',
@@ -249,6 +242,26 @@ export async function deletePenulis(id: number) {
   })
   return res.json()
 }
+export async function importAuthor(formData: FormData) {
+  const res = await fetch(`${BASE_URL}/author/import`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  // Jika respons TIDAK sukses (misal: error 422 atau 500)
+  if (!res.ok) {
+     // Baca body JSON dari respons error untuk mendapatkan pesan dari backend
+     const errorData = await res.json();
+     // Lemparkan error dengan pesan spesifik dari backend
+     throw new Error(errorData.message || 'Gagal mengimpor file.');
+  }
+  
+  // Jika sukses, kembalikan data JSON
+  return res.json();
+};
 
 //api book_author
 export async function fetchPenulisBuku() {
@@ -270,7 +283,6 @@ export async function createPenulisBuku(data: { book_id: string, author_id: stri
   })
   return res.json()
 }
-
 export async function updatePenulisBuku(id: string, data: any) {
   const token = getToken()
   if (!token) throw new Error("Token tidak ditemukan")
@@ -292,7 +304,6 @@ export async function updatePenulisBuku(id: string, data: any) {
 
   return res.json()
 }
-
 export async function deletePenulisBuku(id: number) {
   const res = await fetch(`${BASE_URL}/book_author/${id}`, {
     method: 'DELETE',
@@ -323,7 +334,6 @@ export async function createPeminjamanBuku(data: { user_id: string, book_id: str
   })
   return res.json()
 }
-
 export async function updatePeminjamanBuku(id: string, data: any) {
   const token = getToken()
   if (!token) throw new Error("Token tidak ditemukan")
@@ -345,7 +355,6 @@ export async function updatePeminjamanBuku(id: string, data: any) {
 
   return res.json()
 }
-
 export async function deletePeminjamanBuku(id: number) {
   const res = await fetch(`${BASE_URL}/loan/${id}`, {
     method: 'DELETE',
@@ -383,7 +392,6 @@ export async function fetchMyLoans() {
   if (!res.ok) throw new Error("Gagal mengambil data peminjaman Anda.");
   return res.json();
 }
-
 /** (UNTUK ADMIN) Membuat transaksi peminjaman baru. */
 export async function createLoan(data: { user_id: string; book_ids: string[]; tanggal_kembali: string; }) {
   const res = await fetch(`${BASE_URL}/loan`, {
@@ -401,7 +409,6 @@ export async function createLoan(data: { user_id: string; book_ids: string[]; ta
   }
   return res.json();
 }
-
 /** (UNTUK ADMIN) Mengembalikan buku dari sebuah peminjaman. */
 export async function returnLoan(id: string, data: { books_status: { id: string; status: 'Baik' | 'Rusak' }[] }) {
   const res = await fetch(`${BASE_URL}/loan/${id}/return`, { // Endpoint baru
@@ -419,7 +426,6 @@ export async function returnLoan(id: string, data: { books_status: { id: string;
   }
   return res.json();
 }
-
 /** (UNTUK ADMIN) Menghapus data peminjaman. */
 export async function deleteLoan(id: string) { // ID seharusnya string untuk ULID
   const res = await fetch(`${BASE_URL}/loan/${id}`, {
@@ -434,7 +440,6 @@ export async function deleteLoan(id: string) { // ID seharusnya string untuk ULI
   }
   return res.json();
 }
-
 export async function payFine(id: string) {
   const res = await fetch(`${BASE_URL}/loan/${id}/pay`, {
     method: 'POST',
@@ -450,8 +455,6 @@ export async function payFine(id: string) {
   }
   return res.json();
 }
-
-// ... (fungsi API lainnya)
 
 /** Mengambil data statistik utama untuk dasbor. */
 export async function getDashboardStats() {
@@ -556,16 +559,44 @@ export async function getBookInventoryReport() {
         handleError(error);
     }
 }
-export async function exportFile() {
-    try {
-        const res = await fetch(`${BASE_URL}/reports`, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        });
-        if (!res.ok) throw new Error("Gagal mengambil data inventaris buku.");
-        return res.json();
-    } catch (error) {
-        handleError(error);
+
+export async function exportFile(url: string, params: Record<string, string> = {}) {
+  try {
+    const apiClient = axios.create({
+      baseURL: BASE_URL,
+      headers: {
+        'Authorization': `Bearer ${getToken()}`,
+      },
+    });
+
+    const response = await apiClient.get(url, {
+      params: params,
+      responseType: 'blob',
+    });
+
+    return response;
+  } catch (error: any) {
+    console.error("Export error:", error.response || error);
+
+    // Menangani error dari respons API (yang biasanya JSON)
+    if (error.response && error.response.data) {
+        // Jika respons error adalah blob, coba baca sebagai teks.
+        if (error.response.data instanceof Blob) {
+            try {
+                const errText = await error.response.data.text();
+                const errJson = JSON.parse(errText);
+                throw new Error(errJson.message || 'Gagal mengekspor: server mengembalikan error.');
+            } catch (e) {
+                throw new Error('Gagal mengekspor file, respons server tidak dapat dibaca.');
+            }
+        }
+        // Jika respons error adalah JSON
+        if (typeof error.response.data === 'object' && error.response.data.message) {
+            throw new Error(error.response.data.message);
+        }
     }
+    
+    // Fallback untuk error lainnya (misal: jaringan)
+    throw new Error(error.message || 'Terjadi kesalahan tidak diketahui saat mengekspor.');
+  }
 }

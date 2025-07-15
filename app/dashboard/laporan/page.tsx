@@ -11,14 +11,16 @@ export default function Page() {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="flex flex-1 flex-col p-4 md:p-6">
-          <div className="mb-4">
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
             <h1 className="text-2xl font-semibold tracking-tight">Laporan Perpustakaan</h1>
             <p className="text-muted-foreground">
               Pilih jenis laporan untuk melihat dan mengekspor data.
             </p>
           </div>
           
+          <div className="border rounded-lg p-4 bg-muted">
           <Tabs defaultValue="loans" className="w-full">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
               <TabsTrigger value="loans">Peminjaman</TabsTrigger>
@@ -68,6 +70,8 @@ export default function Page() {
               />
             </TabsContent>
           </Tabs>
+          </div>
+        </div>
         </div>
         <SiteFooter />
       </SidebarInset>

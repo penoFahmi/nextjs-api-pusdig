@@ -41,7 +41,6 @@ const reportColumnsConfig = {
   ],
   'book-inventory': [
     { key: 'title', label: 'Judul Buku' },
-    { key: 'author', label: 'Penulis' }, // <-- PERBAIKAN: Kolom Author ditambahkan
     { key: 'total_stock', label: 'Total Stok' },
     { key: 'available_stock', label: 'Stok Tersedia' },
   ],
@@ -98,45 +97,61 @@ export function ReportGenerator({ reportType, title, description }: ReportGenera
   };
 
   // PERBAIKAN: Fungsi handleExport sekarang menggunakan fungsi 'exportFile' dari api.ts
-  const handleExport = async (format: 'pdf' | 'excel') => {
-    setIsExporting(true);
-    toast.info(`Memulai ekspor ${format.toUpperCase()}...`);
+const handleExport = async (format: 'pdf' | 'excel') => {
+        if (!reportData || reportData.length === 0) {
+            toast.error("Tidak ada data untuk diekspor.");
+            return;
+        }
 
-    try {
-      const url = `/reports/${reportType}/export/${format}`;
-      
-      // Memanggil fungsi API terpusat yang sudah membawa token
-      const response = await exportFile(url);
+        setIsExporting(true);
+        toast.info(`Memulai ekspor ${format.toUpperCase()}...`);
 
-      const blob = response.data;
-      const disposition = response.headers['content-disposition'];
-      
-      let filename = `laporan-${reportType}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
-      if (disposition && disposition.indexOf('attachment') !== -1) {
-          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-          const matches = filenameRegex.exec(disposition);
-          if (matches != null && matches[1]) {
-              filename = matches[1].replace(/['"]/g, '');
-          }
-      }
+        try {
+            // 1. Buat URL dinamis
+            const url = `/reports/${reportType}/export/${format}`;
+            
+            // 2. Siapkan parameter tanggal jika ada
+            const params = needsDateFilter && dateRange?.from && dateRange?.to
+                ? {
+                    start_date: format(dateRange.from, "yyyy-MM-dd"),
+                    end_date: format(dateRange.to, "yyyy-MM-dd"),
+                }
+                : {};
 
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode?.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl);
+            // 3. Panggil fungsi API yang sudah benar
+            const response = await exportFile(url, params);
 
-      toast.success("File berhasil diunduh.");
+            // 4. Proses download (kode Anda di sini sudah hampir benar)
+            const blob = response.data; // data dari axios adalah blob-nya
+            const disposition = response.headers['content-disposition'];
+            
+            let filename = `laporan-${reportType}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
+            if (disposition && disposition.includes('attachment')) {
+                const filenameMatch = disposition.match(/filename="(.+?)"/);
+                if (filenameMatch && filenameMatch.length > 1) {
+                    filename = filenameMatch[1];
+                }
+            }
 
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || error.message || "Terjadi kesalahan saat mengekspor.");
-    } finally {
-      setIsExporting(false);
-    }
-  };
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+
+            toast.success("File berhasil diunduh.");
+
+        } catch (error: any) {
+            toast.error(error.message || "Terjadi kesalahan saat mengekspor.");
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
+    // 
 
   const renderTable = () => {
     if (isLoading) {

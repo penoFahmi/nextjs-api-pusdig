@@ -187,7 +187,8 @@ export default function PeminjamanList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentRows.map((item, index) => (
+          {currentRows.length > 0 ? (
+          currentRows.map((item, index) => (
             <TableRow key={item.id}>
               <TableCell>{indexOfFirstRow + index + 1}</TableCell>
               <TableCell>{item.user?.name || "N/A"}</TableCell>
@@ -236,7 +237,14 @@ export default function PeminjamanList() {
                 )}
               </TableCell>
             </TableRow>
-          ))}
+            ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={7} className="h-24 text-center">
+                            Buku tidak ditemukan.
+                          </TableCell>
+                        </TableRow>
+                      )}
         </TableBody>
       </Table>
       <div className="flex items-center justify-end space-x-4 py-4">
