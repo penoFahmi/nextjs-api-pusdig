@@ -1,6 +1,4 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { ChartAreaInteractive } from "@/components/chart-area-interactive"
-import { DataTable } from "@/components/data-table"
 import { SectionCards } from "@/components/dashboard/section-cards"
 import { OverdueLoansList } from "@/components/dashboard/overdue-loans-list"
 import { SiteHeader } from "@/components/site-header"
@@ -9,7 +7,6 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 
-import data from "./data.json"
 import { LoanActivityChart } from "@/components/dashboard/loan-activity-chart"
 import { PopularBooksList } from "@/components/dashboard/popular-books-list"
 import { SiteFooter } from "@/components/site-footer"

@@ -33,7 +33,7 @@ export function PopularBooksList() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Buku Terpopuler Bulan Ini 🏆</CardTitle>
+        <CardTitle>Buku Terpopuler Bulan Ini</CardTitle>
         <CardDescription>5 buku yang paling sering dipinjam oleh anggota.</CardDescription>
       </CardHeader>
       <CardContent>

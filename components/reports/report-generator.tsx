@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
-// PERBAIKAN: Impor fungsi dari api.ts
 import { getReport, getBookInventoryReport, exportFile } from "@/lib/api"; 
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { IconFileTypePdf, IconFileTypeXls } from "@tabler/icons-react";
 
-// Konfigurasi kolom tabel
 const reportColumnsConfig = {
   'loans': [
     { key: 'member_name', label: 'Nama Anggota' },

@@ -20,11 +20,11 @@ interface ApiChartData {
 const chartConfig = {
   Dipinjam: {
     label: "Dipinjam",
-    color: "hsl(var(--primary))", // Warna biru
+    color: "hsl(var(--primary))",
   },
   Dikembalikan: {
     label: "Dikembalikan",
-    color: "hsl(var(--success))", // Warna hijau (contoh)
+    color: "hsl(var(--success))",
   },
 } satisfies ChartConfig;
 
@@ -56,7 +56,7 @@ export function LoanActivityChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Aktivitas Peminjaman 📈</CardTitle>
+        <CardTitle>Aktivitas Peminjaman</CardTitle>
         <CardDescription>
           Data peminjaman dan pengembalian buku selama 7 hari terakhir.
         </CardDescription>
@@ -83,7 +83,6 @@ export function LoanActivityChart() {
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                // tickFormatter sudah cocok karena label dari backend adalah "d M"
               />
               <ChartTooltip
                 cursor={false}

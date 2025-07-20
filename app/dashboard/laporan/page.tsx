@@ -1,13 +1,23 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import { ReportGenerator } from "@/components/reports/report-generator"; // Impor komponen baru
+import { ReportGenerator } from "@/components/reports/report-generator";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Impor komponen Tabs
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
 
 export default function Page() {
   return (
-    <SidebarProvider>
+      <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "calc(var(--spacing) * 72)",
+              "--header-height": "calc(var(--spacing) * 12)",
+            } as React.CSSProperties
+          }
+       >
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
@@ -18,7 +28,6 @@ export default function Page() {
             <p className="text-muted-foreground">
               Pilih jenis laporan untuk melihat dan mengekspor data.
             </p>
-          </div>
           
           <div className="border rounded-lg p-4 bg-muted">
           <Tabs defaultValue="loans" className="w-full">
@@ -70,6 +79,7 @@ export default function Page() {
               />
             </TabsContent>
           </Tabs>
+          </div>
           </div>
         </div>
         </div>

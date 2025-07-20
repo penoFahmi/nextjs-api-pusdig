@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Ganti dengan URL backend Laravel kamu
-const BASE_URL = "http://172.16.177.202:8000/api";
+// const BASE_URL = "http://172.16.177.202:8000/api";
+const BASE_URL = "http://localhost:8000/api";
 
 const getToken = () => localStorage.getItem('token')
 

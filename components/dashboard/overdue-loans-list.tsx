@@ -39,7 +39,7 @@ export function OverdueLoansList() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Peminjaman Lewat Tenggat ⏰</CardTitle>
+        <CardTitle>Peminjaman Lewat Tenggat</CardTitle>
         <CardDescription>
           Daftar peminjaman yang perlu segera ditindaklanjuti.
         </CardDescription>
